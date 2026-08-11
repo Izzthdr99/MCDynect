@@ -21,7 +21,11 @@
 - Currency values are formatted with a single shared helper: `formatMyr(value)` → `` `MYR ${Math.round(value).toLocaleString('en-MY')}` ``. Defined once (Task 1), reused by later tasks — do not redefine it.
 - All chart data is mock/fabricated (no live backend exists anywhere in this repo) — this is expected and matches every other number already on this dashboard.
 - Delete a static SVG asset only once its last `import`/usage is gone from the file (this happens for all three in Task 5, after Tasks 1–4 land) — never leave a dangling import.
-- Axis-chart tooltips (area/line/bar — anything using `xaxis.categories`) must read the category label via `w.globals.categoryLabels[dataPointIndex]`, **not** `w.globals.labels[dataPointIndex]`. Verified during Task 1: against installed `apexcharts@6.8.0`, `w.globals.labels` holds numeric indices for this config shape while `w.globals.categoryLabels` holds the real category strings — confirmed both against library source (`Data.js`/`Globals.js`/`KeyboardNavigation.js`) and empirically in-browser (see `task-1-report.md`). This does not apply to the donut/pie tooltip (Task 4), which correctly uses `w.globals.labels[seriesIndex]` — donut/pie is a non-axis chart with a different code path (confirmed against `Labels.js`'s `j === null` branch), unaffected by this bug.
+- Tooltip category-label access is **chart-type-dependent** in this apexcharts@6.8.0 install — verified against library source (`Data.js`, `settings/Defaults.js`, `settings/Options.js`) and empirically in-browser for each case (see `task-1-report.md`, `task-3-report.md`):
+  - **Line/area charts** (Tasks 1–2): use `w.globals.categoryLabels[dataPointIndex]`. `Defaults.js`'s `convertCatToNumeric()` sets `xaxis.convertedCatToNumeric = true` by default specifically for line/area/scatter (to remove left/right axis spacing), which is the only condition under which `Data.js` populates `w.labelData.categoryLabels` at all. `w.globals.labels` holds numeric indices instead for these chart types, not the category strings.
+  - **Bar charts** (Task 3): use `w.globals.labels[dataPointIndex]` instead — `convertedCatToNumeric` is never set true for bar, so `categoryLabels` stays empty and `w.globals.labels` retains the real category strings directly.
+  - **Donut/pie** (Task 4): use `w.globals.labels[seriesIndex]` (no `dataPointIndex` — donut/pie tooltips are non-axis-chart, a different code path entirely; confirmed against `Labels.js`'s `j === null` branch, unaffected by any of the above).
+  - Rule of thumb for any future chart added to this file: don't assume either property — verify empirically (e.g. temporary `console.log(JSON.stringify({labels: w.globals.labels, categoryLabels: w.globals.categoryLabels}))` inside the tooltip callback) before trusting either one.
 
 ---
 
@@ -102,6 +106,7 @@ const salesTrendChartOptions = {
   colors: ['#155DFC'],
   fill: {
     type: 'gradient',
+    colors: ['#1447E6'],
     gradient: {
       shadeIntensity: 1,
       opacityFrom: 0.4,
@@ -536,7 +541,7 @@ const salesByLicenseeChartOptions = {
     custom: ({ series, seriesIndex, dataPointIndex, w }) => `
       <div class="chart-tooltip">
         <div class="chart-tooltip-value">${formatMyr(series[seriesIndex][dataPointIndex])}</div>
-        <div class="chart-tooltip-label">${w.globals.categoryLabels[dataPointIndex]}</div>
+        <div class="chart-tooltip-label">${w.globals.labels[dataPointIndex]}</div>
       </div>
     `,
   },
