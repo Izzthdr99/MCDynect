@@ -72,6 +72,7 @@ const salesTrendChartOptions = {
   colors: ['#155DFC'],
   fill: {
     type: 'gradient',
+    colors: ['#1447E6'],
     gradient: {
       shadeIntensity: 1,
       opacityFrom: 0.4,
