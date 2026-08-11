@@ -150,13 +150,50 @@ const salesByOutlet = [
 ]
 
 const salesByLicensee = [
-  { key: 'licensee-1', widthPct: 43.92, color: '#0ba5ec' },
-  { key: 'licensee-2', widthPct: 87.25, color: '#fd853a' },
-  { key: 'licensee-3', widthPct: 64.9, color: '#0ba5ec' },
-  { key: 'licensee-4', widthPct: 19.61, color: '#fd853a' },
-  { key: 'licensee-5', widthPct: 36.47, color: '#0ba5ec' },
-  { key: 'licensee-6', widthPct: 57.65, color: '#fd853a' },
+  { key: 'licensee-1', name: 'Mr Churros Klang Valley', amount: 76500, color: '#0ba5ec' },
+  { key: 'licensee-2', name: 'Mr Churros Johor Bahru', amount: 152000, color: '#fd853a' },
+  { key: 'licensee-3', name: 'Mr Churros Penang', amount: 113000, color: '#0ba5ec' },
+  { key: 'licensee-4', name: 'Mr Churros Ipoh', amount: 34000, color: '#fd853a' },
+  { key: 'licensee-5', name: 'Mr Churros Melaka', amount: 63500, color: '#0ba5ec' },
+  { key: 'licensee-6', name: 'Mr Churros Kuching', amount: 100500, color: '#fd853a' },
 ]
+
+const salesByLicenseeChartOptions = {
+  chart: {
+    type: 'bar',
+    toolbar: { show: false },
+    animations: { enabled: false },
+  },
+  plotOptions: {
+    bar: {
+      horizontal: true,
+      distributed: true,
+      borderRadius: 4,
+      barHeight: '60%',
+    },
+  },
+  colors: salesByLicensee.map((licensee) => licensee.color),
+  dataLabels: { enabled: false },
+  legend: { show: false },
+  grid: { show: false },
+  xaxis: {
+    categories: salesByLicensee.map((licensee) => licensee.name),
+    labels: { show: false },
+    axisTicks: { show: false },
+    axisBorder: { show: false },
+  },
+  yaxis: { labels: { show: false } },
+  tooltip: {
+    custom: ({ series, seriesIndex, dataPointIndex, w }) => `
+      <div class="chart-tooltip">
+        <div class="chart-tooltip-value">${formatMyr(series[seriesIndex][dataPointIndex])}</div>
+        <div class="chart-tooltip-label">${w.globals.categoryLabels[dataPointIndex]}</div>
+      </div>
+    `,
+  },
+}
+
+const salesByLicenseeSeries = [{ name: 'Revenue', data: salesByLicensee.map((licensee) => licensee.amount) }]
 
 const salesByState = [
   { rank: 1, name: 'Selangor', amount: 'RM 51,500' },
@@ -313,13 +350,13 @@ const salesByState = [
               <p>Rank licensee revenue from highest to lowest.</p>
             </div>
             <div class="bar-chart">
-              <div
-                v-for="bar in salesByLicensee"
-                :key="bar.key"
-                class="bar-track"
-              >
-                <div class="bar-fill" :style="{ width: bar.widthPct + '%', background: bar.color }"></div>
-              </div>
+              <VueApexCharts
+                type="bar"
+                width="100%"
+                height="100%"
+                :options="salesByLicenseeChartOptions"
+                :series="salesByLicenseeSeries"
+              />
             </div>
             <div class="card-footer">
               <span>Last Updated : Today, 2:45PM</span>
@@ -741,20 +778,6 @@ const salesByState = [
   flex-direction: column;
   justify-content: space-evenly;
   min-height: 0;
-}
-.bar-track {
-  width: 100%;
-  height: 26px;
-  cursor: pointer;
-}
-.bar-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: filter 180ms ease, box-shadow 180ms ease;
-}
-.bar-track:hover .bar-fill {
-  filter: brightness(1.08);
-  box-shadow: 0 2px 8px rgba(16, 24, 40, 0.15);
 }
 
 /* Donut card */
