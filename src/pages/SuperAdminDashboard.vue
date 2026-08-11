@@ -518,6 +518,11 @@ const salesByState = [
   min-height: 0;
   width: 100%;
   object-fit: contain;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+.line-chart:hover img {
+  transform: scale(1.02);
+  filter: drop-shadow(0 4px 10px rgba(16, 24, 40, 0.12));
 }
 .chart-x-axis {
   display: flex;
@@ -614,10 +619,16 @@ const salesByState = [
 .bar-track {
   width: 100%;
   height: 26px;
+  cursor: pointer;
 }
 .bar-fill {
   height: 100%;
   border-radius: 4px;
+  transition: filter 180ms ease, box-shadow 180ms ease;
+}
+.bar-track:hover .bar-fill {
+  filter: brightness(1.08);
+  box-shadow: 0 2px 8px rgba(16, 24, 40, 0.15);
 }
 
 /* Donut card */
@@ -647,6 +658,11 @@ const salesByState = [
 .donut-chart img {
   width: 100%;
   height: 100%;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+.donut-chart:hover img {
+  transform: scale(1.02);
+  filter: drop-shadow(0 4px 10px rgba(16, 24, 40, 0.12));
 }
 .donut-label {
   position: absolute;
