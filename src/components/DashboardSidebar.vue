@@ -55,7 +55,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
           <img :src="item.icon" :style="{ width: item.width + 'px', height: item.height + 'px' }" alt="" />
         </span>
         <span class="nav-label">{{ item.label }}</span>
-        <span class="nav-tooltip" role="tooltip">{{ item.label }}</span>
+        <span class="nav-tooltip" role="tooltip" aria-hidden="true">{{ item.label }}</span>
       </button>
     </nav>
 
@@ -74,7 +74,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
           />
         </span>
         <span class="nav-label">Settings</span>
-        <span class="nav-tooltip" role="tooltip">Settings</span>
+        <span class="nav-tooltip" role="tooltip" aria-hidden="true">Settings</span>
       </button>
     </div>
   </aside>
@@ -96,7 +96,6 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
   height: 100vh;
   background: #ffffff;
   border-right: 1px solid var(--border);
-  overflow-y: auto;
   transition: width 220ms ease;
   z-index: 20;
 }
@@ -156,7 +155,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
   color: var(--nav-text);
   text-align: left;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease, gap 220ms ease;
 }
 .nav-item:hover {
   background: #f9fafb;
@@ -190,6 +189,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
 .sidebar.collapsed .nav-item {
   justify-content: center;
   padding: 10px;
+  gap: 0;
 }
 
 .nav-tooltip {

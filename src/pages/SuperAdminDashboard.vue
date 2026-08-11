@@ -33,12 +33,8 @@ const activeNavItem = ref('dashboard')
 const sidebarCollapsed = ref(false)
 
 function handleNavigate(key) {
-  if (key === 'dashboard') {
-    activeNavItem.value = key
-    return
-  }
-  // Staff & Roles / System Settings / Settings aren't built yet — no-op for now.
-  activeNavItem.value = key
+  // Only Dashboard is built; other routes are no-ops for now.
+  if (key === 'dashboard') activeNavItem.value = key
 }
 
 // Icon width/height match each SVG's own exported Figma bounding box —
