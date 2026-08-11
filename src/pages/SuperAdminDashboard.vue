@@ -24,7 +24,6 @@ import iconChevronDetails from '../assets/dashboard/icons/icon-chevron-see-detai
 import iconTrophyGold from '../assets/dashboard/icons/icon-trophy-gold.svg'
 import iconTrophySilver from '../assets/dashboard/icons/icon-trophy-silver.svg'
 import iconTrophyBronze from '../assets/dashboard/icons/icon-trophy-bronze.svg'
-import chartDonutChannel from '../assets/dashboard/charts/chart-donut-channel.svg'
 
 const emit = defineEmits(['back-to-workspace'])
 
@@ -194,6 +193,42 @@ const salesByLicenseeChartOptions = {
 }
 
 const salesByLicenseeSeries = [{ name: 'Revenue', data: salesByLicensee.map((licensee) => licensee.amount) }]
+
+const salesByChannel = [
+  { label: 'Cash', value: 82.4, color: '#ff8a4c' },
+  { label: 'Cash Equivalent', value: 17.6, color: '#00bcff' },
+]
+
+const donutChartOptions = {
+  chart: {
+    type: 'donut',
+    toolbar: { show: false },
+    animations: { enabled: false },
+  },
+  labels: salesByChannel.map((channel) => channel.label),
+  colors: salesByChannel.map((channel) => channel.color),
+  dataLabels: { enabled: false },
+  legend: { show: false },
+  stroke: { show: false },
+  plotOptions: {
+    pie: {
+      donut: {
+        size: '75%',
+        labels: { show: false },
+      },
+    },
+  },
+  tooltip: {
+    custom: ({ series, seriesIndex, w }) => `
+      <div class="chart-tooltip">
+        <div class="chart-tooltip-value">${series[seriesIndex]}%</div>
+        <div class="chart-tooltip-label">${w.globals.labels[seriesIndex]}</div>
+      </div>
+    `,
+  },
+}
+
+const donutSeries = salesByChannel.map((channel) => channel.value)
 
 const salesByState = [
   { rank: 1, name: 'Selangor', amount: 'RM 51,500' },
@@ -375,20 +410,22 @@ const salesByState = [
               <p>Dine-in, delivery, takeaway.</p>
             </div>
             <div class="donut-chart">
-              <img :src="chartDonutChannel" alt="Sales by channel donut chart" />
+              <VueApexCharts
+                type="donut"
+                width="100%"
+                height="100%"
+                :options="donutChartOptions"
+                :series="donutSeries"
+              />
               <div class="donut-label">
-                <p class="donut-percent">82.4%</p>
-                <p class="donut-caption">Emergency Fund</p>
+                <p class="donut-percent">{{ salesByChannel[0].value }}%</p>
+                <p class="donut-caption">{{ salesByChannel[0].label }}</p>
               </div>
             </div>
             <div class="donut-legend">
-              <div class="legend-item">
-                <span class="legend-dot" style="background: #2b7fff"></span>
-                <span>Cash</span>
-              </div>
-              <div class="legend-item">
-                <span class="legend-dot" style="background: #d9d9d9"></span>
-                <span>Cash Equivalent</span>
+              <div v-for="channel in salesByChannel" :key="channel.label" class="legend-item">
+                <span class="legend-dot" :style="{ background: channel.color }"></span>
+                <span>{{ channel.label }}</span>
               </div>
             </div>
           </div>
@@ -803,15 +840,6 @@ const salesByState = [
   justify-content: center;
   width: 209px;
   height: 209px;
-}
-.donut-chart img {
-  width: 100%;
-  height: 100%;
-  transition: transform 180ms ease, filter 180ms ease;
-}
-.donut-chart:hover img {
-  transform: scale(1.02);
-  filter: drop-shadow(0 4px 10px rgba(16, 24, 40, 0.12));
 }
 .donut-label {
   position: absolute;
