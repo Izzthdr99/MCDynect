@@ -150,12 +150,12 @@ const salesByOutlet = [
 ]
 
 const salesByLicensee = [
-  { key: 'licensee-1', name: 'Mr Churros Klang Valley', amount: 76500, color: '#0ba5ec' },
-  { key: 'licensee-2', name: 'Mr Churros Johor Bahru', amount: 152000, color: '#fd853a' },
-  { key: 'licensee-3', name: 'Mr Churros Penang', amount: 113000, color: '#0ba5ec' },
-  { key: 'licensee-4', name: 'Mr Churros Ipoh', amount: 34000, color: '#fd853a' },
-  { key: 'licensee-5', name: 'Mr Churros Melaka', amount: 63500, color: '#0ba5ec' },
-  { key: 'licensee-6', name: 'Mr Churros Kuching', amount: 100500, color: '#fd853a' },
+  { key: 'licensee-1', name: 'Mr Churros Klang Valley', amount: 76500, color: '#00a6f4' },
+  { key: 'licensee-2', name: 'Mr Churros Johor Bahru', amount: 152000, color: '#ff8a4c' },
+  { key: 'licensee-3', name: 'Mr Churros Penang', amount: 113000, color: '#05df72' },
+  { key: 'licensee-4', name: 'Mr Churros Ipoh', amount: 34000, color: '#ff6467' },
+  { key: 'licensee-5', name: 'Mr Churros Melaka', amount: 63500, color: '#c27aff' },
+  { key: 'licensee-6', name: 'Mr Churros Kuching', amount: 100500, color: '#fdc700' },
 ]
 
 const salesByLicenseeChartOptions = {
