@@ -24,7 +24,6 @@ import iconChevronDetails from '../assets/dashboard/icons/icon-chevron-see-detai
 import iconTrophyGold from '../assets/dashboard/icons/icon-trophy-gold.svg'
 import iconTrophySilver from '../assets/dashboard/icons/icon-trophy-silver.svg'
 import iconTrophyBronze from '../assets/dashboard/icons/icon-trophy-bronze.svg'
-import chartCumulativeSales from '../assets/dashboard/charts/chart-cumulative-sales.svg'
 import chartDonutChannel from '../assets/dashboard/charts/chart-donut-channel.svg'
 
 const emit = defineEmits(['back-to-workspace'])
@@ -102,7 +101,45 @@ const salesTrendChartOptions = {
 
 const salesTrendSeries = [{ name: 'Sales', data: salesTrend.map((point) => point.value) }]
 
-const cumulativeSalesDays = ['Jan 21', 'Jan 22', 'Jan 23', 'Jan 24', 'Jan 25', 'Jan 26', 'Jan 27']
+const cumulativeSales = [
+  { day: 'Jan 21', value: 15200 },
+  { day: 'Jan 22', value: 19800 },
+  { day: 'Jan 23', value: 17500 },
+  { day: 'Jan 24', value: 21300 },
+  { day: 'Jan 25', value: 16900 },
+  { day: 'Jan 26', value: 24600 },
+  { day: 'Jan 27', value: 23100 },
+]
+
+const cumulativeSalesChartOptions = {
+  chart: {
+    type: 'line',
+    toolbar: { show: false },
+    zoom: { enabled: false },
+    animations: { enabled: false },
+  },
+  colors: ['#51A2FF'],
+  stroke: { curve: 'smooth', width: 2 },
+  dataLabels: { enabled: false },
+  grid: { show: false },
+  xaxis: {
+    categories: cumulativeSales.map((point) => point.day),
+    labels: { show: false },
+    axisTicks: { show: false },
+    axisBorder: { show: false },
+  },
+  yaxis: { show: false },
+  tooltip: {
+    custom: ({ series, seriesIndex, dataPointIndex, w }) => `
+      <div class="chart-tooltip">
+        <div class="chart-tooltip-value">${formatMyr(series[seriesIndex][dataPointIndex])}</div>
+        <div class="chart-tooltip-label">${w.globals.categoryLabels[dataPointIndex]}</div>
+      </div>
+    `,
+  },
+}
+
+const cumulativeSalesSeries = [{ name: 'Sales', data: cumulativeSales.map((point) => point.value) }]
 
 const salesByOutlet = [
   { rank: 1, name: 'Mr Churros Bandar Sri Uda', location: 'Kuala Lumpur', amount: 'RM 34,000', trophy: iconTrophyGold },
@@ -248,9 +285,17 @@ const salesByState = [
               <p>Running total of sales tracked against the previous period.</p>
             </div>
             <div class="line-chart">
-              <img :src="chartCumulativeSales" alt="Cumulative sales chart" />
+              <div class="line-chart-canvas">
+                <VueApexCharts
+                  type="line"
+                  width="100%"
+                  height="100%"
+                  :options="cumulativeSalesChartOptions"
+                  :series="cumulativeSalesSeries"
+                />
+              </div>
               <div class="chart-x-axis">
-                <span v-for="day in cumulativeSalesDays" :key="day">{{ day }}</span>
+                <span v-for="point in cumulativeSales" :key="point.day">{{ point.day }}</span>
               </div>
             </div>
             <div class="card-footer">
@@ -574,17 +619,6 @@ const salesByState = [
   justify-content: flex-end;
   min-height: 0;
 }
-.line-chart img {
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-  object-fit: contain;
-  transition: transform 180ms ease, filter 180ms ease;
-}
-.line-chart:hover img {
-  transform: scale(1.02);
-  filter: drop-shadow(0 4px 10px rgba(16, 24, 40, 0.12));
-}
 .line-chart-canvas {
   flex: 1;
   min-height: 0;
@@ -802,7 +836,7 @@ const salesByState = [
   .donut-card {
     height: auto;
   }
-  .line-chart img {
+  .line-chart-canvas {
     height: 220px;
   }
 }
