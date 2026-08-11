@@ -82,8 +82,8 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
 
 <style scoped>
 .sidebar {
-  --nav-active-bg: #F9E2E5;
-  --nav-active-text: #BD2841;
+  --nav-active-bg: #f9dfe3;
+  --nav-active-text: #54101a;
   --nav-text: #4a5565;
   --border: #e5e7eb;
 
@@ -159,7 +159,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
   transition: background 0.15s ease, color 0.15s ease;
 }
 .nav-item:hover {
-  background: #F9E2E5;
+  background: #f9fafb;
 }
 .nav-item.active {
   background: var(--nav-active-bg);
@@ -173,5 +173,47 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+}
+
+.nav-label {
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 160px;
+  opacity: 1;
+  transition: opacity 160ms ease, max-width 220ms ease;
+}
+.sidebar.collapsed .nav-label {
+  opacity: 0;
+  max-width: 0;
+}
+
+.sidebar.collapsed .nav-item {
+  justify-content: center;
+  padding: 10px;
+}
+
+.nav-tooltip {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #101828;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-6px, -50%);
+  transition: opacity 160ms ease, transform 160ms ease, visibility 160ms;
+  z-index: 30;
+}
+.sidebar.collapsed .nav-item:hover .nav-tooltip,
+.sidebar.collapsed .nav-item:focus-visible .nav-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -50%);
 }
 </style>
