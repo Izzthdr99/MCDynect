@@ -8,6 +8,7 @@
  * workspace selector's "Super Admin" module card.
  */
 import { ref } from 'vue'
+import VueApexCharts from 'vue3-apexcharts'
 import DashboardSidebar from '../components/DashboardSidebar.vue'
 import DashboardTopnav from '../components/DashboardTopnav.vue'
 
@@ -23,7 +24,6 @@ import iconChevronDetails from '../assets/dashboard/icons/icon-chevron-see-detai
 import iconTrophyGold from '../assets/dashboard/icons/icon-trophy-gold.svg'
 import iconTrophySilver from '../assets/dashboard/icons/icon-trophy-silver.svg'
 import iconTrophyBronze from '../assets/dashboard/icons/icon-trophy-bronze.svg'
-import chartSalesTrend from '../assets/dashboard/charts/chart-sales-trend.svg'
 import chartCumulativeSales from '../assets/dashboard/charts/chart-cumulative-sales.svg'
 import chartDonutChannel from '../assets/dashboard/charts/chart-donut-channel.svg'
 
@@ -48,7 +48,59 @@ const statCards = [
   { key: 'avg-sales-kg', label: 'Avg. Sales / KG', value: 'MYR 33.60', delta: '5%', bg: '#faf5ff', icon: iconStatAvg, iconW: 16.67, iconH: 13.33 },
 ]
 
-const salesTrendDays = ['Jan 21', 'Jan 22', 'Jan 23', 'Jan 25', 'Jan 26', 'Jan 27']
+function formatMyr(value) {
+  return `MYR ${Math.round(value).toLocaleString('en-MY')}`
+}
+
+const salesTrend = [
+  { day: 'Jan 21', value: 18400 },
+  { day: 'Jan 22', value: 21900 },
+  { day: 'Jan 23', value: 19600 },
+  { day: 'Jan 24', value: 27300 },
+  { day: 'Jan 25', value: 20100 },
+  { day: 'Jan 26', value: 25800 },
+  { day: 'Jan 27', value: 22400 },
+]
+
+const salesTrendChartOptions = {
+  chart: {
+    type: 'area',
+    toolbar: { show: false },
+    zoom: { enabled: false },
+    animations: { enabled: false },
+  },
+  colors: ['#155DFC'],
+  fill: {
+    type: 'gradient',
+    gradient: {
+      shadeIntensity: 1,
+      opacityFrom: 0.4,
+      opacityTo: 0,
+      stops: [0, 100],
+    },
+  },
+  stroke: { curve: 'straight', width: 2 },
+  dataLabels: { enabled: false },
+  grid: { show: false },
+  xaxis: {
+    categories: salesTrend.map((point) => point.day),
+    labels: { show: false },
+    axisTicks: { show: false },
+    axisBorder: { show: false },
+  },
+  yaxis: { show: false },
+  tooltip: {
+    custom: ({ series, seriesIndex, dataPointIndex, w }) => `
+      <div class="chart-tooltip">
+        <div class="chart-tooltip-value">${formatMyr(series[seriesIndex][dataPointIndex])}</div>
+        <div class="chart-tooltip-label">${w.globals.categoryLabels[dataPointIndex]}</div>
+      </div>
+    `,
+  },
+}
+
+const salesTrendSeries = [{ name: 'Sales', data: salesTrend.map((point) => point.value) }]
+
 const cumulativeSalesDays = ['Jan 21', 'Jan 22', 'Jan 23', 'Jan 24', 'Jan 25', 'Jan 26', 'Jan 27']
 
 const salesByOutlet = [
@@ -136,9 +188,17 @@ const salesByState = [
               <p>Daily revenue trend across all outlets.</p>
             </div>
             <div class="line-chart">
-              <img :src="chartSalesTrend" alt="Daily sales trend chart" />
+              <div class="line-chart-canvas">
+                <VueApexCharts
+                  type="area"
+                  width="100%"
+                  height="100%"
+                  :options="salesTrendChartOptions"
+                  :series="salesTrendSeries"
+                />
+              </div>
               <div class="chart-x-axis">
-                <span v-for="day in salesTrendDays" :key="day">{{ day }}</span>
+                <span v-for="point in salesTrend" :key="point.day">{{ point.day }}</span>
               </div>
             </div>
             <div class="card-footer">
@@ -523,6 +583,37 @@ const salesByState = [
 .line-chart:hover img {
   transform: scale(1.02);
   filter: drop-shadow(0 4px 10px rgba(16, 24, 40, 0.12));
+}
+.line-chart-canvas {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+/* Shared ApexCharts tooltip styling. ApexCharts injects this markup directly
+   into the chart's DOM at runtime, bypassing Vue's compiler — :deep() is
+   required for scoped styles to reach it. */
+:deep(.apexcharts-tooltip) {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+:deep(.chart-tooltip) {
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(16, 24, 40, 0.12);
+}
+:deep(.chart-tooltip-value) {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--heading);
+}
+:deep(.chart-tooltip-label) {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--body-text);
 }
 .chart-x-axis {
   display: flex;
