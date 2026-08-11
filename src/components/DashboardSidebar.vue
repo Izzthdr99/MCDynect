@@ -39,6 +39,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
   <aside class="sidebar" :class="{ collapsed }">
     <div class="sidebar-header">
       <img class="logo" :src="iconFullLogo" alt="MC Dynect" />
+      <span class="logo-mark" aria-hidden="true"><span class="logo-mark-m">M</span><span class="logo-mark-c">C</span></span>
     </div>
 
     <nav class="sidebar-nav">
@@ -82,8 +83,8 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
 
 <style scoped>
 .sidebar {
-  --nav-active-bg: #f9dfe3;
-  --nav-active-text: #54101a;
+  --nav-active-bg: #F9E2E5;
+  --nav-active-text: #BD2841;
   --nav-text: #4a5565;
   --border: #e5e7eb;
 
@@ -107,7 +108,8 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 27px 7px 19px;
+  height: 66px;
+  padding: 0 7px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -121,6 +123,30 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
 .sidebar.collapsed .logo {
   opacity: 0;
   max-width: 0;
+}
+
+.logo-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+  transition: opacity 160ms ease, max-width 220ms ease;
+}
+.sidebar.collapsed .logo-mark {
+  opacity: 1;
+  max-width: 40px;
+}
+.logo-mark-m {
+  color: #EEBA5D;
+}
+.logo-mark-c {
+  color: #AF2136;
 }
 
 .sidebar-nav {
@@ -158,7 +184,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
   transition: background 0.15s ease, color 0.15s ease, gap 220ms ease;
 }
 .nav-item:hover {
-  background: #f9fafb;
+  background: rgba(249, 223, 227, 0.5);
 }
 .nav-item.active {
   background: var(--nav-active-bg);

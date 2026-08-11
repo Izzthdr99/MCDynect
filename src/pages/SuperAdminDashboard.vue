@@ -24,6 +24,7 @@ import iconChevronDetails from '../assets/dashboard/icons/icon-chevron-see-detai
 import iconTrophyGold from '../assets/dashboard/icons/icon-trophy-gold.svg'
 import iconTrophySilver from '../assets/dashboard/icons/icon-trophy-silver.svg'
 import iconTrophyBronze from '../assets/dashboard/icons/icon-trophy-bronze.svg'
+import imgPatternBg from '../assets/dashboard/pattern-bg.jpg'
 
 const emit = defineEmits(['back-to-workspace'])
 
@@ -43,7 +44,7 @@ const statCards = [
   { key: 'mtd-sales', label: 'MTD Sales', value: 'MYR 612,900', delta: '0%', bg: '#f0fdf4', icon: iconStatMtd, iconW: 15, iconH: 15 },
   { key: 'total-kg', label: 'Total KG Sold', value: '18,240 kg', delta: '0%', bg: '#eef2ff', icon: iconStatKg, iconW: 13.33, iconH: 16.67 },
   { key: 'unsold-waste', label: 'Unsold / Waste', value: '342 sets', delta: '10%', bg: '#fef2f2', icon: iconStatWaste, iconW: 13.33, iconH: 16.67 },
-  { key: 'avg-sales-kg', label: 'Avg. Sales / KG', value: 'MYR 33.60', delta: '5%', bg: '#faf5ff', icon: iconStatAvg, iconW: 16.67, iconH: 13.33 },
+  { key: 'avg-sales-kg', label: 'Avg. Sales / KG', value: 'MYR 33.60', delta: '-5%', bg: '#faf5ff', icon: iconStatAvg, iconW: 16.67, iconH: 13.33 },
 ]
 
 function formatMyr(value) {
@@ -252,7 +253,10 @@ const salesByState = [
     <DashboardSidebar :active-item="activeNavItem" :collapsed="sidebarCollapsed" @navigate="handleNavigate" />
 
     <div class="dashboard-main">
+      <div class="dashboard-bg" :style="{ backgroundImage: 'url(' + imgPatternBg + ')' }"></div>
+
       <DashboardTopnav
+        :collapsed="sidebarCollapsed"
         @toggle-sidebar="sidebarCollapsed = !sidebarCollapsed"
         @switch-workspace="emit('back-to-workspace')"
       />
@@ -466,7 +470,7 @@ const salesByState = [
   align-items: stretch;
   width: 100%;
   min-height: 100vh;
-  background: #f9fafb;
+  background: #ffffff;
   font-family: inherit;
 }
 .dashboard * {
@@ -477,22 +481,56 @@ const salesByState = [
 }
 
 .dashboard-main {
+  position: relative;
   display: flex;
   flex-direction: column;
   flex: 1;
   min-width: 0;
+  overflow: hidden;
   /* Sidebar is position: fixed (out of flex flow), so its width has to be
      reserved here manually instead of the flexbox row sizing it. */
   margin-left: 251px;
   transition: margin-left 220ms ease;
 }
 
+/* Decorative pattern behind the topnav + content, fading to solid white
+   about halfway down so it never competes with the widgets below the fold. */
+.dashboard-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 500px;
+  z-index: 0;
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+.dashboard-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 28.397%,
+    rgba(255, 255, 255, 0.6) 35.859%,
+    rgba(255, 255, 255, 0.946) 45.87%,
+    rgb(255, 255, 255) 100%
+  );
+}
+
 .dashboard-content {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  /* Topnav is position: fixed (out of flow), so its height is reserved
+     here manually instead of flexbox stacking it above this content. */
+  margin-top: 66px;
   padding: 32px;
-  max-width: 1189px;
 }
 
 /* Header */
@@ -569,12 +607,14 @@ const salesByState = [
   display: flex;
   align-items: flex-end;
   gap: 6px;
-  width: 263px;
-  flex-shrink: 0;
+  flex: 1 1 0;
+  min-width: 200px;
   padding: 24px;
-  background: #ffffff;
-  border: 1px solid #ffd282;
+  border: 1px solid transparent;
   border-radius: 12px;
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(180deg, #ffd282 0%, #ba4255 100%) border-box;
 }
 .stat-data {
   display: flex;

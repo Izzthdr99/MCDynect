@@ -3,3 +3,25 @@
 @plugin "flowbite/plugin";
 @source "../node_modules/flowbite";
 @source "../node_modules/flowbite-vue";
+@import "@fontsource/geist-sans/400.css";
+@import "@fontsource/geist-sans/500.css";
+@import "@fontsource/geist-sans/600.css";
+@import "@fontsource/geist-sans/700.css";
+
+@theme {
+  --font-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-900: #54101a;
+  --color-brand-700: #911b2d;
+  --color-danger-600: #c70036;
+
+  --color-ink: #101828;
+  --color-body: #4a5565;
+  --color-muted: #6a7282;
+  --color-line: #e5e7eb;
+  --color-surface: #f9fafb;
+}
+
+body {
+  font-family: var(--font-sans);
+}
