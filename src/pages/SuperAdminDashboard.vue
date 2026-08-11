@@ -187,7 +187,7 @@ const salesByLicenseeChartOptions = {
     custom: ({ series, seriesIndex, dataPointIndex, w }) => `
       <div class="chart-tooltip">
         <div class="chart-tooltip-value">${formatMyr(series[seriesIndex][dataPointIndex])}</div>
-        <div class="chart-tooltip-label">${w.globals.categoryLabels[dataPointIndex]}</div>
+        <div class="chart-tooltip-label">${w.globals.labels[dataPointIndex]}</div>
       </div>
     `,
   },
