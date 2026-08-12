@@ -360,7 +360,7 @@ form {
   pointer-events: none;
 }
 .pattern-bg-rotate {
-  width: 2000px;
+  width: 2200px;
   height: 1402px;
   transform: rotate(-27.01deg);
 }

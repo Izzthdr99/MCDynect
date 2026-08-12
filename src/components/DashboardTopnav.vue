@@ -30,6 +30,10 @@ defineProps({
     type: String,
     default: null,
   },
+  showWorkspaceSwitcher: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const emit = defineEmits(['toggle-sidebar', 'switch-workspace', 'open-notifications', 'sign-out'])
@@ -143,33 +147,35 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
       <button type="button" class="icon-button" aria-label="Toggle sidebar" @click="$emit('toggle-sidebar')">
         <img class="icon-sidebar-toggle" :src="iconSidebarToggle" alt="" />
       </button>
-      <span class="divider" aria-hidden="true"></span>
-      <div class="workspace-menu" ref="workspaceSwitcherRef">
-        <button
-          type="button"
-          class="workspace-switcher"
-          :class="{ open: workspaceMenuOpen }"
-          aria-haspopup="true"
-          :aria-expanded="workspaceMenuOpen"
-          @click="toggleWorkspaceMenu"
-        >
-          <span>Super Admin</span>
-          <img class="chevron" :src="iconChevronSort" alt="" />
-        </button>
-        <div v-if="workspaceMenuOpen" class="workspace-dropdown" role="menu">
+      <template v-if="showWorkspaceSwitcher">
+        <span class="divider" aria-hidden="true"></span>
+        <div class="workspace-menu" ref="workspaceSwitcherRef">
           <button
-            v-for="mod in modules"
-            :key="mod.key"
             type="button"
-            class="workspace-dropdown-item"
-            :class="{ active: mod.key === activeModule }"
-            role="menuitem"
-            @click="selectModule(mod.key)"
+            class="workspace-switcher"
+            :class="{ open: workspaceMenuOpen }"
+            aria-haspopup="true"
+            :aria-expanded="workspaceMenuOpen"
+            @click="toggleWorkspaceMenu"
           >
-            {{ mod.title }}
+            <span>Super Admin</span>
+            <img class="chevron" :src="iconChevronSort" alt="" />
           </button>
+          <div v-if="workspaceMenuOpen" class="workspace-dropdown" role="menu">
+            <button
+              v-for="mod in modules"
+              :key="mod.key"
+              type="button"
+              class="workspace-dropdown-item"
+              :class="{ active: mod.key === activeModule }"
+              role="menuitem"
+              @click="selectModule(mod.key)"
+            >
+              {{ mod.title }}
+            </button>
+          </div>
         </div>
-      </div>
+      </template>
     </div>
 
     <div class="topnav-right">
@@ -263,16 +269,22 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
             </div>
           </div>
           <button type="button" class="account-dropdown-item" role="menuitem">
-            <img class="icon-user" :src="iconUser" alt="" />
+            <span class="account-dropdown-icon">
+              <img class="icon-user" :src="iconUser" alt="" />
+            </span>
             <span>Account</span>
           </button>
           <button type="button" class="account-dropdown-item" role="menuitem">
-            <img class="icon-question-circle" :src="iconQuestionCircle" alt="" />
+            <span class="account-dropdown-icon">
+              <img class="icon-question-circle" :src="iconQuestionCircle" alt="" />
+            </span>
             <span>Help center</span>
           </button>
           <span class="account-dropdown-separator" aria-hidden="true"></span>
           <button type="button" class="account-dropdown-item danger" role="menuitem" @click="signOut">
-            <img class="icon-sign-out" :src="iconSignOut" alt="" />
+            <span class="account-dropdown-icon">
+              <img class="icon-sign-out" :src="iconSignOut" alt="" />
+            </span>
             <span>Sign out</span>
           </button>
           <div class="account-dropdown-footer">© 2026 MCDynect</div>
@@ -303,7 +315,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
   transition: left 220ms ease;
 }
 .topnav.collapsed {
-  left: 72px;
+  left: 64px;
 }
 
 .topnav-left,
@@ -616,6 +628,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
 }
 
 .avatar-button {
+  display: flex;
   padding: 0;
   border: none;
   background: transparent;
@@ -715,12 +728,27 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
 .account-dropdown-item.danger {
   color: #c70036;
 }
-.account-dropdown-item .icon-user,
-.account-dropdown-item .icon-question-circle,
-.account-dropdown-item .icon-sign-out {
+/* 16x16 alignment slot so Account/Help center/Sign out text stays flush,
+   regardless of each icon's own (non-square) exported aspect ratio. */
+.account-dropdown-icon {
+  display: flex;
   flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
   width: 16px;
   height: 16px;
+}
+.account-dropdown-icon .icon-user {
+  width: 8px;
+  height: 10.67px;
+}
+.account-dropdown-icon .icon-question-circle {
+  width: 13.33px;
+  height: 13.33px;
+}
+.account-dropdown-icon .icon-sign-out {
+  width: 12px;
+  height: 12px;
 }
 
 .account-dropdown-separator {

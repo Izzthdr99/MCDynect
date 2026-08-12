@@ -2,15 +2,18 @@
 /**
  * DashboardSidebar.vue
  * Figma source: https://www.figma.com/design/6WiB15odMAP0hE7ufDP3iA/Mc-Dynect-26?node-id=1214-2961
+ * Licensing module variant: https://www.figma.com/design/6WiB15odMAP0hE7ufDP3iA/Mc-Dynect-26?node-id=1370-4063
  *
- * Primary navigation for the SuperAdmin dashboard.
+ * Primary navigation for dashboard modules. The nav item list (icons,
+ * labels, optional right-chevron for not-yet-built sub-navigation) is
+ * supplied by the caller via the navItems prop so each module can show
+ * its own menu while sharing this shell.
  */
 import iconFullLogo from '../assets/dashboard/sidebar/full-logo.svg'
-import iconDashboard from '../assets/dashboard/sidebar/icon-dashboard.svg'
-import iconStaffRoles from '../assets/dashboard/sidebar/icon-staff-roles.svg'
 import iconSettings from '../assets/dashboard/sidebar/icon-settings.svg'
+import iconChevronRight from '../assets/dashboard/sidebar/licensing/icon-angle-right.svg'
 
-defineProps({
+const props = defineProps({
   activeItem: {
     type: String,
     default: 'dashboard',
@@ -19,18 +22,13 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  navItems: {
+    type: Array,
+    required: true,
+  },
 })
 
 const emit = defineEmits(['navigate'])
-
-// Each icon keeps its own exported Figma size (not a forced 20x20 square) —
-// the source SVGs are cropped to the vector's own bounding box, so scaling
-// them all to the same square distorts the ones that aren't already square.
-const navItems = [
-  { key: 'dashboard', icon: iconDashboard, label: 'Dashboard', width: 15, height: 15 },
-  { key: 'staff-roles', icon: iconStaffRoles, label: 'Staff & Roles', width: 16.67, height: 13.33 },
-  { key: 'system-settings', icon: iconSettings, label: 'System Settings', width: 16.67, height: 16.67 },
-]
 
 const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
 </script>
@@ -44,7 +42,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
 
     <nav class="sidebar-nav">
       <button
-        v-for="item in navItems"
+        v-for="item in props.navItems"
         :key="item.key"
         type="button"
         class="nav-item"
@@ -56,6 +54,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
           <img :src="item.icon" :style="{ width: item.width + 'px', height: item.height + 'px' }" alt="" />
         </span>
         <span class="nav-label">{{ item.label }}</span>
+        <img v-if="item.chevron" class="nav-chevron" :src="iconChevronRight" alt="" />
         <span class="nav-tooltip" role="tooltip" aria-hidden="true">{{ item.label }}</span>
       </button>
     </nav>
@@ -101,7 +100,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
   z-index: 20;
 }
 .sidebar.collapsed {
-  width: 72px;
+  width: 64px;
 }
 
 .sidebar-header {
@@ -152,7 +151,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0px;
   flex: 1;
   padding: 8px;
 }
@@ -160,7 +159,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
 .sidebar-footer {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0px;
   padding: 12px 8px;
   border-top: 1px solid var(--border);
 }
@@ -212,9 +211,27 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
   max-width: 0;
 }
 
+.nav-chevron {
+  flex-shrink: 0;
+  width: 10.67px;
+  height: 6px;
+  margin-left: auto;
+  transform: rotate(90deg);
+  opacity: 1;
+  transition: opacity 160ms ease;
+}
+.sidebar.collapsed .nav-chevron {
+  opacity: 0;
+  width: 0;
+}
+
+.sidebar.collapsed .sidebar-nav {
+  gap: 0px;
+}
+
 .sidebar.collapsed .nav-item {
   justify-content: center;
-  padding: 10px;
+  padding: 12px;
   gap: 0;
 }
 

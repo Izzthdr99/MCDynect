@@ -1,49 +1,70 @@
 <script setup>
 /**
- * SuperAdminDashboard.vue
- * Figma source: https://www.figma.com/design/6WiB15odMAP0hE7ufDP3iA/Mc-Dynect-26?node-id=926-12145
+ * LicensingDashboard.vue
+ * Figma source: https://www.figma.com/design/6WiB15odMAP0hE7ufDP3iA/Mc-Dynect-26?node-id=1027-22257
  *
- * SuperAdmin module landing dashboard: sidebar + topnav shell around sales
- * KPI cards, trend charts, and revenue ranking tables. Reached from the
- * workspace selector's "Super Admin" module card.
+ * Licensing module landing dashboard: sidebar + topnav shell around licensee
+ * KPI cards, revenue trend, outlet coverage map, and restock widgets.
+ * Reached from the workspace selector's "Licensing" module card.
  */
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import VueApexCharts from 'vue3-apexcharts'
 import DashboardSidebar from '../components/DashboardSidebar.vue'
 import DashboardTopnav from '../components/DashboardTopnav.vue'
 
-import iconDashboard from '../assets/dashboard/sidebar/icon-dashboard.svg'
-import iconStaffRoles from '../assets/dashboard/sidebar/icon-staff-roles.svg'
-import iconSettings from '../assets/dashboard/sidebar/icon-settings.svg'
 import iconAngleDown from '../assets/dashboard/icons/icon-angle-down.svg'
 import iconCalendarMonth from '../assets/dashboard/icons/icon-calendar-month.svg'
 import iconLayers from '../assets/dashboard/icons/icon-layers.svg'
 import iconMinus from '../assets/dashboard/icons/icon-minus.svg'
-import iconStatSales from '../assets/dashboard/icons/icon-stat-sales.svg'
-import iconStatMtd from '../assets/dashboard/icons/icon-stat-mtd.svg'
-import iconStatKg from '../assets/dashboard/icons/icon-stat-kg.svg'
-import iconStatWaste from '../assets/dashboard/icons/icon-stat-waste.svg'
-import iconStatAvg from '../assets/dashboard/icons/icon-stat-avg.svg'
 import iconChevronDetails from '../assets/dashboard/icons/icon-chevron-see-details.svg'
-import iconTrophyGold from '../assets/dashboard/icons/icon-trophy-gold.svg'
-import iconTrophySilver from '../assets/dashboard/icons/icon-trophy-silver.svg'
-import iconTrophyBronze from '../assets/dashboard/icons/icon-trophy-bronze.svg'
+import iconChevronSort from '../assets/dashboard/topnav/icon-chevron-sort.svg'
+import iconStatActiveLicensee from '../assets/dashboard/icons/icon-stat-active-licensee.svg'
+import iconStatGroupSales from '../assets/dashboard/icons/icon-stat-group-sales.svg'
+import iconStatComboRestock from '../assets/dashboard/icons/icon-stat-combo-restock.svg'
+import imgWorldMap from '../assets/dashboard/licensing/world-map.svg'
 import imgPatternBg from '../assets/dashboard/pattern-bg.jpg'
+
+import iconGrid from '../assets/dashboard/sidebar/licensing/icon-grid.svg'
+import iconFileLines from '../assets/dashboard/sidebar/licensing/icon-file-lines.svg'
+import iconCart from '../assets/dashboard/sidebar/licensing/icon-cart.svg'
+import iconClipboardList from '../assets/dashboard/sidebar/licensing/icon-clipboard-list.svg'
+import iconTag from '../assets/dashboard/sidebar/licensing/icon-tag.svg'
+import iconStoreAlt from '../assets/dashboard/sidebar/licensing/icon-store-alt.svg'
+import iconMapPinAlt from '../assets/dashboard/sidebar/licensing/icon-map-pin-alt.svg'
+import iconBadgeCheck from '../assets/dashboard/sidebar/licensing/icon-badge-check.svg'
+import iconRefresh from '../assets/dashboard/sidebar/licensing/icon-refresh.svg'
+import iconGiftBox from '../assets/dashboard/sidebar/licensing/icon-gift-box.svg'
+import iconArrowsRepeat from '../assets/dashboard/sidebar/licensing/icon-arrows-repeat.svg'
+import iconBarChart from '../assets/dashboard/sidebar/licensing/icon-bar-chart.svg'
+import iconSettings from '../assets/dashboard/sidebar/icon-settings.svg'
 
 const emit = defineEmits(['back-to-workspace', 'sign-out'])
 
-const navItems = [
-  { key: 'dashboard', icon: iconDashboard, label: 'Dashboard', width: 15, height: 15 },
-  { key: 'staff-roles', icon: iconStaffRoles, label: 'Staff & Roles', width: 16.67, height: 13.33 },
-  { key: 'system-settings', icon: iconSettings, label: 'System Settings', width: 16.67, height: 16.67 },
-]
-
-const activeNavItem = ref('dashboard')
+const activeNavItem = ref('overview')
 const sidebarCollapsed = ref(false)
 
+// Sidebar module list swapped in for the Licensing workspace. Items with a
+// trailing chevron (Outlet Management, Licensing End to End, etc.) open
+// sub-navigation that isn't built yet, matching the Figma design.
+const navItems = [
+  { key: 'overview', icon: iconGrid, label: 'Overview', width: 15, height: 15 },
+  { key: 'manage-memo', icon: iconFileLines, label: 'Manage Memo', width: 13.33, height: 16.67 },
+  { key: 'order-request', icon: iconCart, label: 'Order Request', width: 13.33, height: 15 },
+  { key: 'form-application', icon: iconClipboardList, label: 'Form Application', width: 13.33, height: 16.67 },
+  { key: 'event-price-settings', icon: iconTag, label: 'Event Price Settings', width: 15, height: 15 },
+  { key: 'flexi-operation', icon: iconSettings, label: 'Flexi Operation', width: 16.67, height: 16.67 },
+  { key: 'bazaar-application', icon: iconStoreAlt, label: 'Bazaar Application', width: 16.67, height: 16.67 },
+  { key: 'outlet-management', icon: iconMapPinAlt, label: 'Outlet Management', width: 13.33, height: 16.67, chevron: true },
+  { key: 'licensing-end-to-end', icon: iconBadgeCheck, label: 'Licensing End to End', width: 16.67, height: 16.67, chevron: true },
+  { key: 'program-renewals', icon: iconRefresh, label: 'Program Renewals', width: 13.38, height: 15, chevron: true },
+  { key: 'starter-pack-promotions', icon: iconGiftBox, label: 'Starter Pack & Promotions', width: 16.67, height: 16.67, chevron: true },
+  { key: 'trade-in', icon: iconArrowsRepeat, label: 'Trade In', width: 13.33, height: 15, chevron: true },
+  { key: 'analysis', icon: iconBarChart, label: 'Analysis', width: 16.67, height: 15, chevron: true },
+]
+
 function handleNavigate(key) {
-  // Only Dashboard is built; other routes are no-ops for now.
-  if (key === 'dashboard') activeNavItem.value = key
+  // Only Overview is built; sub-navigation items are no-ops for now.
+  if (key === 'overview') activeNavItem.value = key
 }
 
 const filterMenuOpen = ref(false)
@@ -76,14 +97,11 @@ const layersButtonRef = ref(null)
 const layersPanelRef = ref(null)
 
 const pendingActivity = [
-  { index: '1', category: 'Corporate Finance', count: '(110 Items)' },
-  { index: '2', category: 'Financial Conrollership', count: '(03 Items)' },
-  { index: '3', category: 'Finance Operations', count: '(01 Items)' },
-  { index: '4', category: 'Treasury & Acoounting', count: '(01 Items)' },
-  { index: '5', category: 'Ledger Management', count: '(01 Items)' },
-  { index: '5', category: 'Invoice Tracking', count: '(15 Items)' },
-  { index: '5', category: 'Expense Reports', count: '(23 Items)' },
-  { index: '5', category: 'Budget Planning', count: '(9 Items)' },
+  { index: '1', category: 'Program Renewals', count: '(12 Items)' },
+  { index: '2', category: 'Licensing End to End', count: '(7 Items)' },
+  { index: '3', category: 'Trade In Applications', count: '(5 Items)' },
+  { index: '4', category: 'Starter Pack & Promotions', count: '(3 Items)' },
+  { index: '5', category: 'Bazaar Applications', count: '(9 Items)' },
 ]
 
 function toggleLayersPanel() {
@@ -107,32 +125,26 @@ function handleClickOutside(event) {
 onMounted(() => document.addEventListener('click', handleClickOutside))
 onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
 
-// Icon width/height match each SVG's own exported Figma bounding box —
-// forcing them all into one square (as an earlier pass did) stretches
-// every icon that isn't already square.
 const statCards = [
-  { key: 'today-sales', label: "Today's Sales", value: 'MYR 24,580', delta: '0%', bg: '#eef6ff', icon: iconStatSales, iconW: 11.67, iconH: 16.67 },
-  { key: 'mtd-sales', label: 'MTD Sales', value: 'MYR 612,900', delta: '0%', bg: '#f0fdf4', icon: iconStatMtd, iconW: 15, iconH: 15 },
-  { key: 'total-kg', label: 'Total KG Sold', value: '18,240 kg', delta: '0%', bg: '#eef2ff', icon: iconStatKg, iconW: 13.33, iconH: 16.67 },
-  { key: 'unsold-waste', label: 'Unsold / Waste', value: '342 sets', delta: '10%', bg: '#fef2f2', icon: iconStatWaste, iconW: 13.33, iconH: 16.67 },
-  { key: 'avg-sales-kg', label: 'Avg. Sales / KG', value: 'MYR 33.60', delta: '-5%', bg: '#faf5ff', icon: iconStatAvg, iconW: 16.67, iconH: 13.33 },
+  { key: 'active-licensee', label: 'Active Licensee', value: '150', delta: '0%', bg: '#faf5ff', icon: iconStatActiveLicensee, iconW: 16.67, iconH: 16.67 },
+  { key: 'group-total-sales', label: 'Group Total Sales', value: 'MYR 39,403', delta: '0%', bg: '#f0fdf4', icon: iconStatGroupSales, iconW: 15, iconH: 14.58 },
+  { key: 'total-combo-restock', label: 'Total Combo Restock', value: '15,000', delta: '0%', bg: '#fffbeb', icon: iconStatComboRestock, iconW: 13.84, iconH: 15 },
 ]
 
 function formatMyr(value) {
   return `MYR ${Math.round(value).toLocaleString('en-MY')}`
 }
 
-const salesTrend = [
-  { day: 'Jan 21', value: 18400 },
-  { day: 'Jan 22', value: 21900 },
-  { day: 'Jan 23', value: 19600 },
-  { day: 'Jan 24', value: 27300 },
-  { day: 'Jan 25', value: 20100 },
-  { day: 'Jan 26', value: 25800 },
-  { day: 'Jan 27', value: 22400 },
+const licenseeTrend = [
+  { day: 'Jan 21', value: 15200 },
+  { day: 'Jan 22', value: 21400 },
+  { day: 'Jan 23', value: 28900 },
+  { day: 'Jan 25', value: 17800 },
+  { day: 'Jan 26', value: 24600 },
+  { day: 'Jan 27', value: 19300 },
 ]
 
-const salesTrendChartOptions = {
+const licenseeTrendChartOptions = {
   chart: {
     type: 'area',
     toolbar: { show: false },
@@ -154,7 +166,7 @@ const salesTrendChartOptions = {
   dataLabels: { enabled: false },
   grid: { show: false },
   xaxis: {
-    categories: salesTrend.map((point) => point.day),
+    categories: licenseeTrend.map((point) => point.day),
     labels: { show: false },
     axisTicks: { show: false },
     axisBorder: { show: false },
@@ -170,66 +182,34 @@ const salesTrendChartOptions = {
   },
 }
 
-const salesTrendSeries = [{ name: 'Sales', data: salesTrend.map((point) => point.value) }]
+const licenseeTrendSeries = [{ name: 'Revenue', data: licenseeTrend.map((point) => point.value) }]
 
-const cumulativeSales = [
-  { day: 'Jan 21', value: 15200 },
-  { day: 'Jan 22', value: 19800 },
-  { day: 'Jan 23', value: 17500 },
-  { day: 'Jan 24', value: 21300 },
-  { day: 'Jan 25', value: 16900 },
-  { day: 'Jan 26', value: 24600 },
-  { day: 'Jan 27', value: 23100 },
+const outletPerformance = [
+  { name: 'Mr Churros Bandar Sri Uda', amount: 'RM 60,750' },
+  { name: 'Mr Churros Bandar Sri Uda II', amount: 'RM 52,000' },
+  { name: 'Mr Churros Taman Melati', amount: 'RM 47,200' },
+  { name: 'Mr Churros Kota Damansara', amount: 'RM 45,000' },
+  { name: 'Mr Churros Bukit Bintang', amount: 'RM 45,000' },
+  { name: 'Mr Churros Bandar Banting', amount: 'RM 38,500' },
 ]
 
-const cumulativeSalesChartOptions = {
-  chart: {
-    type: 'line',
-    toolbar: { show: false },
-    zoom: { enabled: false },
-    animations: { enabled: false },
-  },
-  colors: ['#51A2FF'],
-  stroke: { curve: 'smooth', width: 2 },
-  dataLabels: { enabled: false },
-  grid: { show: false },
-  xaxis: {
-    categories: cumulativeSales.map((point) => point.day),
-    labels: { show: false },
-    axisTicks: { show: false },
-    axisBorder: { show: false },
-  },
-  yaxis: { show: false },
-  tooltip: {
-    custom: ({ series, seriesIndex, dataPointIndex, w }) => `
-      <div class="chart-tooltip">
-        <div class="chart-tooltip-value">${formatMyr(series[seriesIndex][dataPointIndex])}</div>
-        <div class="chart-tooltip-label">${w.globals.categoryLabels[dataPointIndex]}</div>
-      </div>
-    `,
-  },
-}
-
-const cumulativeSalesSeries = [{ name: 'Sales', data: cumulativeSales.map((point) => point.value) }]
-
-const salesByOutlet = [
-  { rank: 1, name: 'Mr Churros Bandar Sri Uda', location: 'Kuala Lumpur', amount: 'RM 34,000', trophy: iconTrophyGold },
-  { rank: 2, name: 'Mr Churros Bandar Sri Uda II', location: 'Kuala Lumpur', amount: 'RM 30,000', trophy: iconTrophySilver },
-  { rank: 3, name: 'Mr Churros Taman Melati', location: 'Kuala Lumpur', amount: 'RM 29,000', trophy: iconTrophyBronze },
-  { rank: 4, name: 'Mr Churros Kota Damansara', location: 'Kuala Lumpur', amount: 'RM 14,000', trophy: null },
-  { rank: 5, name: 'Mr Churros Bukit Bintang', location: 'Kuala Lumpur', amount: 'RM 10,000', trophy: null },
+const comboRestockByState = [
+  { key: 'combo-set', name: '[Package] Combo Set', percent: 41 },
+  { key: 'dipping-container', name: 'Dipping Container', percent: 22 },
+  { key: 'combo-equipment', name: 'Combo Equipment', percent: 15 },
+  { key: 'cinnamon-sugar', name: 'Cinnamon Sugar', percent: 12 },
+  { key: 'collectable-sticker', name: 'Collectable Sticker', percent: 8 },
+  { key: 'cotton-candy', name: 'Cotton Candy', percent: 2 },
 ]
 
-const salesByLicensee = [
-  { key: 'licensee-1', name: 'Mr Churros Klang Valley', amount: 76500, color: '#00a6f4' },
-  { key: 'licensee-2', name: 'Mr Churros Johor Bahru', amount: 152000, color: '#ff8a4c' },
-  { key: 'licensee-3', name: 'Mr Churros Penang', amount: 113000, color: '#05df72' },
-  { key: 'licensee-4', name: 'Mr Churros Ipoh', amount: 34000, color: '#ff6467' },
-  { key: 'licensee-5', name: 'Mr Churros Melaka', amount: 63500, color: '#c27aff' },
-  { key: 'licensee-6', name: 'Mr Churros Kuching', amount: 100500, color: '#fdc700' },
+const stateRestockVsSales = [
+  { week: 'Week 1', restock: 630, sales: 760 },
+  { week: 'Week 2', restock: 630, sales: 840 },
+  { week: 'Week 3', restock: 180, sales: 1000 },
+  { week: 'Week 4', restock: 750, sales: 300 },
 ]
 
-const salesByLicenseeChartOptions = {
+const stateRestockChartOptions = {
   chart: {
     type: 'bar',
     toolbar: { show: false },
@@ -237,85 +217,34 @@ const salesByLicenseeChartOptions = {
   },
   plotOptions: {
     bar: {
-      horizontal: true,
-      distributed: true,
+      columnWidth: '55%',
       borderRadius: 4,
-      barHeight: '60%',
     },
   },
-  colors: salesByLicensee.map((licensee) => licensee.color),
+  colors: ['#1447E6', '#8EC5FF'],
   dataLabels: { enabled: false },
   legend: { show: false },
   grid: { show: false },
   xaxis: {
-    categories: salesByLicensee.map((licensee) => licensee.name),
-    labels: { show: false },
+    categories: stateRestockVsSales.map((point) => point.week),
+    labels: { style: { colors: '#4a5565', fontSize: '14px', fontWeight: 500 } },
     axisTicks: { show: false },
     axisBorder: { show: false },
   },
-  yaxis: { labels: { show: false } },
+  yaxis: { show: false },
   tooltip: {
     custom: ({ series, seriesIndex, dataPointIndex, w }) => `
       <div class="chart-tooltip">
-        <div class="chart-tooltip-value">${formatMyr(series[seriesIndex][dataPointIndex])}</div>
-        <div class="chart-tooltip-label">${w.globals.labels[dataPointIndex]}</div>
+        <div class="chart-tooltip-value">${series[seriesIndex][dataPointIndex]} units</div>
+        <div class="chart-tooltip-label">${w.globals.seriesNames[seriesIndex]} · ${w.globals.categoryLabels[dataPointIndex]}</div>
       </div>
     `,
   },
 }
 
-const salesByLicenseeSeries = [{ name: 'Revenue', data: salesByLicensee.map((licensee) => licensee.amount) }]
-
-const salesByChannel = [
-  { label: 'Cash', value: 82.4, color: '#ff8a4c' },
-  { label: 'Cash Equivalent', value: 17.6, color: '#00bcff' },
-]
-
-const donutChartOptions = {
-  chart: {
-    type: 'donut',
-    toolbar: { show: false },
-    animations: { enabled: false },
-  },
-  labels: salesByChannel.map((channel) => channel.label),
-  colors: salesByChannel.map((channel) => channel.color),
-  dataLabels: { enabled: false },
-  legend: { show: false },
-  stroke: { show: false },
-  plotOptions: {
-    pie: {
-      donut: {
-        size: '75%',
-        labels: { show: false },
-      },
-    },
-  },
-  tooltip: {
-    custom: ({ series, seriesIndex, w }) => `
-      <div class="chart-tooltip">
-        <div class="chart-tooltip-value">${series[seriesIndex]}%</div>
-        <div class="chart-tooltip-label">${w.globals.labels[seriesIndex]}</div>
-      </div>
-    `,
-  },
-}
-
-const donutSeries = salesByChannel.map((channel) => channel.value)
-
-const salesByState = [
-  { rank: 1, name: 'Selangor', amount: 'RM 51,500' },
-  { rank: 2, name: 'Johor', amount: 'RM 50,000' },
-  { rank: 3, name: 'Penang', amount: 'RM 48,450' },
-  { rank: 4, name: 'Kedah', amount: 'RM 47,000' },
-  { rank: 5, name: 'Perak', amount: 'RM 45,500' },
-  { rank: 6, name: 'Kelantan', amount: 'RM 44,000' },
-  { rank: 7, name: 'Terengganu', amount: 'RM 42,600' },
-  { rank: 8, name: 'Pahang', amount: 'RM 41,100' },
-  { rank: 9, name: 'Sabah', amount: 'RM 39,750' },
-  { rank: 10, name: 'Sarawak', amount: 'RM 38,200' },
-  { rank: 11, name: 'Negeri Sembilan', amount: 'RM 36,500' },
-  { rank: 12, name: 'Melaka', amount: 'RM 34,000' },
-  { rank: 13, name: 'Perlis', amount: 'RM 34,000' },
+const stateRestockSeries = [
+  { name: 'Restock', data: stateRestockVsSales.map((point) => point.restock) },
+  { name: 'Sales', data: stateRestockVsSales.map((point) => point.sales) },
 ]
 </script>
 
@@ -333,8 +262,8 @@ const salesByState = [
 
       <DashboardTopnav
         :collapsed="sidebarCollapsed"
+        :show-workspace-switcher="false"
         @toggle-sidebar="sidebarCollapsed = !sidebarCollapsed"
-        @switch-workspace="emit('back-to-workspace')"
         @sign-out="emit('sign-out')"
       />
 
@@ -428,7 +357,7 @@ const salesByState = [
         <div class="widget-grid">
           <div class="chart-card">
             <div class="card-header">
-              <h2>Sales Trend (Daily</h2>
+              <h2>Licensee Trend (Daily)</h2>
               <p>Daily revenue trend across all outlets.</p>
             </div>
             <div class="line-chart">
@@ -437,12 +366,12 @@ const salesByState = [
                   type="area"
                   width="100%"
                   height="100%"
-                  :options="salesTrendChartOptions"
-                  :series="salesTrendSeries"
+                  :options="licenseeTrendChartOptions"
+                  :series="licenseeTrendSeries"
                 />
               </div>
               <div class="chart-x-axis">
-                <span v-for="point in salesTrend" :key="point.day">{{ point.day }}</span>
+                <span v-for="point in licenseeTrend" :key="point.day">{{ point.day }}</span>
               </div>
             </div>
             <div class="card-footer">
@@ -454,26 +383,52 @@ const salesByState = [
             </div>
           </div>
 
-          <div class="chart-card">
+          <div class="map-card">
             <div class="card-header">
-              <h2>Sales By Outlet</h2>
+              <h2>Outlet Count by State</h2>
+              <p>Number of active outlets per state, Malaysia.</p>
+            </div>
+            <div class="world-map">
+              <img :src="imgWorldMap" alt="World map highlighting states with active outlets" />
+            </div>
+          </div>
+        </div>
+
+        <div class="widget-grid">
+          <div class="table-card">
+            <div class="card-header table-card-header">
+              <h2>Outlet Performance Table</h2>
               <p>Top-performing outlets ranked by revenue this period.</p>
             </div>
-            <ul class="ranked-list">
-              <li v-for="outlet in salesByOutlet" :key="outlet.rank" class="ranked-row">
-                <div class="ranked-name">
-                  <span class="ranked-index">{{ outlet.rank }}.</span>
-                  <div class="ranked-name-helper">
-                    <p class="ranked-title">{{ outlet.name }}</p>
-                    <p class="ranked-subtitle">{{ outlet.location }}</p>
-                  </div>
+            <div class="data-table">
+              <div class="data-table-header">
+                <span class="data-table-col-name">Page</span>
+                <span class="data-table-col-amount">
+                  Revenu
+                  <img class="sort-icon" :src="iconChevronSort" alt="" />
+                </span>
+              </div>
+              <div v-for="outlet in outletPerformance" :key="outlet.name" class="data-table-row">
+                <span class="data-table-col-name">{{ outlet.name }}</span>
+                <span class="data-table-col-amount">{{ outlet.amount }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="card-header">
+              <h2>Total Combo Restock By State</h2>
+              <p>Restock volume share by combo item, this period.</p>
+            </div>
+            <div class="progress-list">
+              <div v-for="item in comboRestockByState" :key="item.key" class="progress-row">
+                <span class="progress-label">{{ item.name }}</span>
+                <div class="progress-track">
+                  <div class="progress-fill" :style="{ width: item.percent + '%' }"></div>
                 </div>
-                <div class="ranked-amount">
-                  <img v-if="outlet.trophy" class="trophy-icon" :src="outlet.trophy" alt="" />
-                  <span>{{ outlet.amount }}</span>
-                </div>
-              </li>
-            </ul>
+                <span class="progress-value">{{ item.percent }}%</span>
+              </div>
+            </div>
             <div class="card-footer">
               <span>Last Updated : Today, 2:45PM</span>
               <a href="#" class="see-details">
@@ -487,21 +442,21 @@ const salesByState = [
         <div class="widget-grid">
           <div class="chart-card">
             <div class="card-header">
-              <h2>Cumulative Sales</h2>
-              <p>Running total of sales tracked against the previous period.</p>
+              <h2>Licensee Trend (Daily)</h2>
+              <p>Daily revenue trend across all outlets.</p>
             </div>
             <div class="line-chart">
               <div class="line-chart-canvas">
                 <VueApexCharts
-                  type="line"
+                  type="area"
                   width="100%"
                   height="100%"
-                  :options="cumulativeSalesChartOptions"
-                  :series="cumulativeSalesSeries"
+                  :options="licenseeTrendChartOptions"
+                  :series="licenseeTrendSeries"
                 />
               </div>
               <div class="chart-x-axis">
-                <span v-for="point in cumulativeSales" :key="point.day">{{ point.day }}</span>
+                <span v-for="point in licenseeTrend" :key="point.day">{{ point.day }}</span>
               </div>
             </div>
             <div class="card-footer">
@@ -515,17 +470,21 @@ const salesByState = [
 
           <div class="chart-card">
             <div class="card-header">
-              <h2>Sales By Licensee</h2>
-              <p>Rank licensee revenue from highest to lowest.</p>
+              <h2>State Restock vs. Sales</h2>
+              <p>Restock volume compared to sales revenue, by week.</p>
             </div>
             <div class="bar-chart">
               <VueApexCharts
                 type="bar"
                 width="100%"
                 height="100%"
-                :options="salesByLicenseeChartOptions"
-                :series="salesByLicenseeSeries"
+                :options="stateRestockChartOptions"
+                :series="stateRestockSeries"
               />
+            </div>
+            <div class="bar-chart-legend">
+              <div class="legend-item"><span class="legend-dot" style="background: #1447e6"></span><span>Restock</span></div>
+              <div class="legend-item"><span class="legend-dot" style="background: #8ec5ff"></span><span>Sales</span></div>
             </div>
             <div class="card-footer">
               <span>Last Updated : Today, 2:45PM</span>
@@ -534,52 +493,6 @@ const salesByState = [
                 <img :src="iconChevronDetails" alt="" />
               </a>
             </div>
-          </div>
-        </div>
-
-        <div class="widget-grid">
-          <div class="donut-card">
-            <div class="card-header">
-              <h2>Sales By Channel</h2>
-              <p>Dine-in, delivery, takeaway.</p>
-            </div>
-            <div class="donut-chart">
-              <VueApexCharts
-                type="donut"
-                width="100%"
-                height="100%"
-                :options="donutChartOptions"
-                :series="donutSeries"
-              />
-              <div class="donut-label">
-                <p class="donut-percent">{{ salesByChannel[0].value }}%</p>
-                <p class="donut-caption">{{ salesByChannel[0].label }}</p>
-              </div>
-            </div>
-            <div class="donut-legend">
-              <div v-for="channel in salesByChannel" :key="channel.label" class="legend-item">
-                <span class="legend-dot" :style="{ background: channel.color }"></span>
-                <span>{{ channel.label }}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="chart-card">
-            <div class="card-header">
-              <h2>Sales By State</h2>
-              <p>State sales performance ranked by revenue.</p>
-            </div>
-            <ul class="ranked-list scrollable">
-              <li v-for="state in salesByState" :key="state.rank" class="ranked-row">
-                <div class="ranked-name">
-                  <span class="ranked-index">{{ state.rank }}.</span>
-                  <p class="ranked-title">{{ state.name }}</p>
-                </div>
-                <div class="ranked-amount">
-                  <span>{{ state.amount }}</span>
-                </div>
-              </li>
-            </ul>
           </div>
         </div>
       </div>
@@ -631,16 +544,11 @@ const salesByState = [
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  /* Sidebar is position: fixed (out of flex flow) and the pending-activity
-     panel is too, so their widths have to be reserved here manually
-     instead of the flexbox row sizing them. */
   margin-left: 251px;
   margin-right: 0;
   transition: margin-left 220ms ease, margin-right 220ms ease;
 }
 
-/* Decorative pattern behind the topnav + content, fading to solid white
-   about halfway down so it never competes with the widgets below the fold. */
 .dashboard-bg {
   position: absolute;
   top: 0;
@@ -673,8 +581,6 @@ const salesByState = [
   display: flex;
   flex-direction: column;
   gap: 24px;
-  /* Topnav is position: fixed (out of flow), so its height is reserved
-     here manually instead of flexbox stacking it above this content. */
   margin-top: 66px;
   padding: 32px;
 }
@@ -789,9 +695,6 @@ const salesByState = [
   color: var(--body-text-subtle);
   opacity: 1;
 }
-/* Icon width/height match each SVG's own native aspect ratio — the angle-down
-   chevron (10.67x6) and calendar-month glyph (12x12) aren't interchangeable,
-   so each gets its own size instead of being squashed into one shared box. */
 .filter-select-icon {
   flex-shrink: 0;
   pointer-events: none;
@@ -968,29 +871,44 @@ const salesByState = [
   border-radius: 6px;
   flex-shrink: 0;
 }
-/* stat-icon-wrap img sizing is set inline per-icon (see statCards) since
-   each exported SVG has its own native aspect ratio. */
 
-/* Widget grid (two-up chart rows). auto-fit/minmax reflows off the grid's
-   own rendered width, so it collapses to one column whenever the layers
-   panel (or a narrow viewport) leaves too little room for two — no
-   viewport-only media query needed to react to the panel opening. */
+/* Widget grid (two-up rows). auto-fit/minmax reflows off the grid's own
+   rendered width, so it collapses to one column whenever the layers panel
+   (or a narrow viewport) leaves too little room for two. */
 .widget-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 24px;
 }
 
-.chart-card {
+.chart-card,
+.map-card,
+.table-card {
   display: flex;
   flex-direction: column;
-  gap: 24px;
   height: 462px;
-  padding: 20px;
   background: #ffffff;
   border: 1px solid var(--border);
   border-radius: 16px;
   min-width: 0;
+}
+.chart-card,
+.map-card {
+  gap: 24px;
+  padding: 20px;
+}
+/* The map graphic is a ~3MB SVG (350+ paths, 176 shadow filters) — without
+   containment, opening/closing the layers panel forces the browser to
+   repaint it on every frame of the sibling `.dashboard-main` margin-right
+   transition, even though its own box never actually changes size. `contain`
+   isolates its layout/paint from that ancestor change, and `will-change`
+   promotes it to its own compositor layer so the browser can skip re-doing
+   that work each frame. */
+.map-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 462px 462px;
+  contain: strict;
+  will-change: transform;
 }
 .card-header {
   padding-bottom: 16px;
@@ -1049,9 +967,6 @@ const salesByState = [
   width: 100%;
 }
 
-/* Shared ApexCharts tooltip styling. ApexCharts injects this markup directly
-   into the chart's DOM at runtime, bypassing Vue's compiler — :deep() is
-   required for scoped styles to reach it. */
 :deep(.apexcharts-tooltip) {
   border: none !important;
   box-shadow: none !important;
@@ -1087,78 +1002,132 @@ const salesByState = [
   color: var(--body-text);
 }
 
-/* Ranked lists (outlet / state tables) */
-.ranked-list {
+/* World map card */
+.world-map {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+.world-map img {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Outlet Performance table */
+.table-card-header {
+  padding: 20px 20px 16px;
+  border-bottom: none;
+}
+.data-table {
   display: flex;
   flex: 1;
   flex-direction: column;
   min-height: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.ranked-list.scrollable {
   overflow-y: auto;
 }
-.ranked-row {
+.data-table-header,
+.data-table-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  height: 56px;
+  padding: 0 20px;
   flex-shrink: 0;
+}
+.data-table-header {
+  height: 44px;
+  background: #f9fafb;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.data-table-row {
+  height: 56px;
   border-bottom: 1px solid var(--border-light);
 }
-.ranked-row:last-child {
+.data-table-row:last-child {
   border-bottom: none;
 }
-.ranked-name {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
+.data-table-col-name {
+  flex: 1;
   min-width: 0;
-}
-.ranked-index {
   font-size: 14px;
   font-weight: 500;
   color: var(--heading);
-  flex-shrink: 0;
-}
-.ranked-name-helper {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
-}
-.ranked-title {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--heading);
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.ranked-subtitle {
-  margin: 0;
-  font-size: 14px;
-  color: var(--body-text);
-}
-.ranked-amount {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
+.data-table-header .data-table-col-name,
+.data-table-header .data-table-col-amount {
   font-size: 14px;
   font-weight: 500;
   color: var(--body-text);
 }
-.trophy-icon {
-  width: 16px;
-  height: 16px;
+.data-table-col-amount {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--heading);
+}
+.sort-icon {
+  width: 6.67px;
+  height: 10.67px;
 }
 
-/* Bar chart (licensee) */
+/* Combo restock progress list */
+.progress-list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-evenly;
+  min-height: 0;
+}
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.progress-label {
+  flex-shrink: 0;
+  width: 144px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--heading);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.progress-track {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 10px;
+  background: #f3f4f6;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: #818cf8;
+  border-radius: 9999px;
+}
+.progress-value {
+  flex-shrink: 0;
+  width: 40px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--heading);
+  text-align: right;
+}
+
+/* Vertical bar chart (state restock vs sales) */
 .bar-chart {
   display: flex;
   flex: 1;
@@ -1166,54 +1135,11 @@ const salesByState = [
   justify-content: space-evenly;
   min-height: 0;
 }
-
-/* Donut card */
-.donut-card {
+.bar-chart-legend {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  height: 462px;
-  padding: 24px;
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: 0px 1px 0.25px rgba(29, 41, 61, 0.02);
-}
-.donut-card .card-header {
-  width: 100%;
-}
-.donut-chart {
-  position: relative;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  width: 209px;
-  height: 209px;
-}
-.donut-label {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  text-align: center;
-}
-.donut-percent {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 30px;
-  color: var(--heading);
-}
-.donut-caption {
-  margin: 0;
-  font-size: 16px;
-  color: var(--body-text);
-}
-.donut-legend {
-  display: flex;
   gap: 16px;
+  flex-shrink: 0;
 }
 .legend-item {
   display: flex;
@@ -1231,7 +1157,8 @@ const salesByState = [
 /* ---------- Responsive ---------- */
 @media (max-width: 1100px) {
   .chart-card,
-  .donut-card {
+  .map-card,
+  .table-card {
     height: auto;
   }
   .line-chart-canvas {
