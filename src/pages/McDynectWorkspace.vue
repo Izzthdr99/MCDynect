@@ -27,7 +27,7 @@ const modules = [
   { key: 'super-admin', icon: iconSuperAdmin, title: 'Super Admin', description: 'Manage tenants, users, and permissions on the platform.' },
   { key: 'licensing', icon: iconLicensing, title: 'Licensing', description: 'Issue licenses, track renewals, and manage accounts.' },
   { key: 'licensee', icon: iconLicensee, title: 'Licensee', description: 'Check your license status, renewal dates, and entitlements.' },
-  { key: 'operation-manager', icon: iconOperationManager, title: 'Operation Manager', description: 'Manage daily operations, handle escalations, and track KPIs.' },
+  { key: 'operation-manager', icon: iconOperationManager, title: 'Outlet Manager', description: 'Manage daily operations, handle escalations, and track KPIs.' },
   { key: 'area-manager', icon: iconAreaManager, title: 'Area Manager', description: 'Oversee local outlets — staffing, performance, and operations.' },
   { key: 'finance', icon: iconFinance, title: 'Finance', description: 'Handle invoicing, payments, and financial reports.' },
   { key: 'procurement', icon: iconProcurement, title: 'Procurement', description: 'Submit requisitions, manage vendors, and process orders.' },
