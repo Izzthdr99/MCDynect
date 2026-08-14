@@ -351,7 +351,7 @@ const performanceVsFeeSeries = [
 const terminationYears = ['2022', '2023', '2024', '2025', '2026']
 const terminationRateChartOptions = {
   chart: { type: 'area', toolbar: { show: false }, animations: { enabled: false } },
-  colors: ['#af2136'],
+  colors: ['#d53f52'],
   stroke: { curve: 'smooth', width: 2 },
   fill: {
     type: 'gradient',
@@ -725,7 +725,7 @@ const terminationRateSeries = [{ name: 'Termination rate', data: [9.2, 8.1, 6.8,
 
 <style scoped>
 .dashboard {
-  --brand: #911b2d;
+  --brand: #b13444;
   --heading: #101828;
   --body-text: #4a5565;
   --border: #e5e7eb;
@@ -737,7 +737,7 @@ const terminationRateSeries = [{ name: 'Termination rate', data: [9.2, 8.1, 6.8,
   align-items: stretch;
   width: 100%;
   min-height: 100vh;
-  background: #ffffff;
+  background: #F9FAFB;
   font-family: inherit;
 }
 .dashboard * {
@@ -1037,7 +1037,7 @@ const terminationRateSeries = [{ name: 'Termination rate', data: [9.2, 8.1, 6.8,
   border-radius: 12px;
   background:
     linear-gradient(#ffffff, #ffffff) padding-box,
-    linear-gradient(180deg, #ffd282 0%, #ba4255 100%) border-box;
+    linear-gradient(180deg, #ffd282 0%, #db5b6b 100%) border-box;
 }
 .stat-data {
   display: flex;

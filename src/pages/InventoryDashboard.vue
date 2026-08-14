@@ -285,7 +285,7 @@ const abcCumulativePercent = abcItems.map((item) => {
 })
 const abcAnalysisChartOptions = {
   chart: { toolbar: { show: false }, animations: { enabled: false } },
-  colors: ['#1447e6', '#2b7fff', '#8ec5ff', '#911b2d'],
+  colors: ['#1447e6', '#2b7fff', '#8ec5ff', '#b13444'],
   stroke: { width: [0, 0, 0, 2], curve: 'smooth' },
   plotOptions: { bar: { columnWidth: '55%', borderRadius: 4 } },
   markers: { size: 0 },
@@ -329,7 +329,7 @@ const stockoutByCategory = [
 const stockoutChartOptions = {
   chart: { type: 'bar', toolbar: { show: false }, animations: { enabled: false } },
   plotOptions: { bar: { horizontal: true, borderRadius: 4, barHeight: '55%' } },
-  colors: ['#af2136'],
+  colors: ['#d53f52'],
   dataLabels: { enabled: false },
   legend: { show: false },
   grid: { show: false },
@@ -371,7 +371,7 @@ const inventoryValueByCategory = [
   { label: 'Frozen', value: 35, color: '#51a2ff' },
   { label: 'Dry Goods', value: 27, color: '#ff8904' },
   { label: 'Snacks', value: 22, color: '#00a63e' },
-  { label: 'Beverages', value: 16, color: '#911b2d' },
+  { label: 'Beverages', value: 16, color: '#b13444' },
 ]
 const inventoryValueChartOptions = {
   chart: { type: 'donut', toolbar: { show: false }, animations: { enabled: false } },
@@ -402,24 +402,24 @@ const slowMovingHeatmapRows = [
     cells: [
       { value: 80, bg: '#721623', text: '#ffffff' },
       { value: 20, bg: '#e47081', text: '#ffffff' },
-      { value: 10, bg: '#f9dfe3', text: '#0f172b' },
-      { value: 5, bg: '#f9dfe3', text: '#0f172b' },
+      { value: 10, bg: '#fae8ea', text: '#0f172b' },
+      { value: 5, bg: '#fae8ea', text: '#0f172b' },
     ],
   },
   {
     label: 'Dry Goods',
     cells: [
       { value: 15, bg: '#e47081', text: '#ffffff' },
-      { value: 60, bg: '#af2136', text: '#ffffff' },
+      { value: 60, bg: '#d53f52', text: '#ffffff' },
       { value: 25, bg: '#e47081', text: '#ffffff' },
-      { value: 10, bg: '#f9dfe3', text: '#0f172b' },
+      { value: 10, bg: '#fae8ea', text: '#0f172b' },
     ],
   },
   {
     label: 'Snacks',
     cells: [
-      { value: 5, bg: '#f9dfe3', text: '#0f172b' },
-      { value: 10, bg: '#f9dfe3', text: '#0f172b' },
+      { value: 5, bg: '#fae8ea', text: '#0f172b' },
+      { value: 10, bg: '#fae8ea', text: '#0f172b' },
       { value: 45, bg: '#da3850', text: '#ffffff' },
       { value: 20, bg: '#e47081', text: '#ffffff' },
     ],
@@ -427,9 +427,9 @@ const slowMovingHeatmapRows = [
   {
     label: 'Beverages',
     cells: [
-      { value: 3, bg: '#f9dfe3', text: '#0f172b' },
-      { value: 8, bg: '#f9dfe3', text: '#0f172b' },
-      { value: 12, bg: '#f9dfe3', text: '#0f172b' },
+      { value: 3, bg: '#fae8ea', text: '#0f172b' },
+      { value: 8, bg: '#fae8ea', text: '#0f172b' },
+      { value: 12, bg: '#fae8ea', text: '#0f172b' },
       { value: 20, bg: '#da3850', text: '#ffffff' },
     ],
   },
@@ -446,7 +446,7 @@ const demandSupplyByMonth = [
 ]
 const demandSupplyChartOptions = {
   chart: { type: 'line', toolbar: { show: false }, animations: { enabled: false } },
-  colors: ['#af2136', '#51a2ff'],
+  colors: ['#d53f52', '#51a2ff'],
   stroke: { curve: 'smooth', width: 2 },
   markers: { size: 0 },
   dataLabels: { enabled: false },
@@ -681,7 +681,7 @@ const demandSupplySeries = [
               <div class="legend-item"><span class="legend-dot" style="background: #1447e6"></span><span>Tier A</span></div>
               <div class="legend-item"><span class="legend-dot" style="background: #2b7fff"></span><span>Tier B</span></div>
               <div class="legend-item"><span class="legend-dot" style="background: #8ec5ff"></span><span>Tier C</span></div>
-              <div class="legend-item"><span class="legend-dot" style="background: #911b2d"></span><span>Cumulative %</span></div>
+              <div class="legend-item"><span class="legend-dot" style="background: #b13444"></span><span>Cumulative %</span></div>
             </div>
             <div class="card-footer">
               <span>Last Updated : Today, 2:45PM</span>
@@ -748,7 +748,7 @@ const demandSupplySeries = [
             </div>
             <div class="widget-legend">
               <div class="legend-item"><span class="legend-dot" style="background: #99a1af"></span><span>Promised</span></div>
-              <div class="legend-item"><span class="legend-dot" style="background: #af2136"></span><span>Actual</span></div>
+              <div class="legend-item"><span class="legend-dot" style="background: #d53f52"></span><span>Actual</span></div>
             </div>
             <div class="card-footer">
               <span>Last Updated : Today, 2:45PM</span>
@@ -848,7 +848,7 @@ const demandSupplySeries = [
               />
             </div>
             <div class="widget-legend">
-              <div class="legend-item"><span class="legend-dot" style="background: #af2136"></span><span>Demand</span></div>
+              <div class="legend-item"><span class="legend-dot" style="background: #d53f52"></span><span>Demand</span></div>
               <div class="legend-item"><span class="legend-dot" style="background: #51a2ff"></span><span>Supply</span></div>
             </div>
             <div class="card-footer">
@@ -877,7 +877,7 @@ const demandSupplySeries = [
 
 <style scoped>
 .dashboard {
-  --brand: #911b2d;
+  --brand: #b13444;
   --heading: #101828;
   --body-text: #4a5565;
   --border: #e5e7eb;
@@ -890,7 +890,7 @@ const demandSupplySeries = [
   align-items: stretch;
   width: 100%;
   min-height: 100vh;
-  background: #ffffff;
+  background: #F9FAFB;
   font-family: inherit;
 }
 .dashboard * {
@@ -1190,7 +1190,7 @@ const demandSupplySeries = [
   border-radius: 12px;
   background:
     linear-gradient(#ffffff, #ffffff) padding-box,
-    linear-gradient(180deg, #ffd282 0%, #ba4255 100%) border-box;
+    linear-gradient(180deg, #ffd282 0%, #db5b6b 100%) border-box;
 }
 .stat-data {
   display: flex;
@@ -1457,7 +1457,7 @@ const demandSupplySeries = [
   position: absolute;
   top: 0;
   height: 10px;
-  background: #f9dfe3;
+  background: #fae8ea;
   border-radius: 9999px;
 }
 .dumbbell-dot {
@@ -1473,7 +1473,7 @@ const demandSupplySeries = [
   z-index: 1;
 }
 .dumbbell-dot.actual {
-  background: #af2136;
+  background: #d53f52;
   z-index: 2;
 }
 .dumbbell-value {

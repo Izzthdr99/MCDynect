@@ -121,7 +121,7 @@ async function handleSubmit() {
 
 <style scoped>
 .page {
-  --brand: #911b2d;
+  --brand: #b13444;
   --brand-strong: #54101a;
   --danger: #c70036;
   --border: #e5e7eb;

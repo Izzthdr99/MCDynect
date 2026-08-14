@@ -77,9 +77,9 @@ function handleSelect(moduleKey) {
 
 <style scoped>
 .page {
-  --brand: #911b2d;
+  --brand: #b13444;
   --brand-strong: #54101a;
-  --accent: #af2136;
+  --accent: #d53f52;
   --hover-border: #ffd282;
   --text-body: #4a5565;
 

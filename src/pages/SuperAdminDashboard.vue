@@ -599,7 +599,7 @@ const salesByState = [
 
 <style scoped>
 .dashboard {
-  --brand: #911b2d;
+  --brand: #b13444;
   --heading: #101828;
   --body-text: #4a5565;
   --border: #e5e7eb;
@@ -611,7 +611,7 @@ const salesByState = [
   align-items: stretch;
   width: 100%;
   min-height: 100vh;
-  background: #ffffff;
+  background: #F9FAFB;
   font-family: inherit;
 }
 .dashboard * {
@@ -921,7 +921,7 @@ const salesByState = [
   border-radius: 12px;
   background:
     linear-gradient(#ffffff, #ffffff) padding-box,
-    linear-gradient(180deg, #ffd282 0%, #ba4255 100%) border-box;
+    linear-gradient(180deg, #ffd282 0%, #db5b6b 100%) border-box;
 }
 .stat-data {
   display: flex;

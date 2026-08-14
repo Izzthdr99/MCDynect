@@ -145,7 +145,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
   color: #EEBA5D;
 }
 .logo-mark-c {
-  color: #AF2136;
+  color: #D53F52;
 }
 
 .sidebar-nav {

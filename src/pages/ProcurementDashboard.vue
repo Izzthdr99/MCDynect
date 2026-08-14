@@ -580,7 +580,7 @@ const preorderVolumeSeries = [{ name: 'Preorders', data: preorderVolumeByDay.map
 
 <style scoped>
 .dashboard {
-  --brand: #911b2d;
+  --brand: #b13444;
   --heading: #101828;
   --body-text: #4a5565;
   --border: #e5e7eb;
@@ -592,7 +592,7 @@ const preorderVolumeSeries = [{ name: 'Preorders', data: preorderVolumeByDay.map
   align-items: stretch;
   width: 100%;
   min-height: 100vh;
-  background: #ffffff;
+  background: #F9FAFB;
   font-family: inherit;
 }
 .dashboard * {
@@ -635,11 +635,11 @@ const preorderVolumeSeries = [{ name: 'Preorders', data: preorderVolumeByDay.map
   inset: 0;
   background-image: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0) 28.397%,
-    rgba(255, 255, 255, 0.6) 35.859%,
-    rgba(255, 255, 255, 0.946) 45.87%,
-    rgb(255, 255, 255) 100%
+    rgba(249, 250, 251, 0) 0%,
+    rgba(249, 250, 251, 0) 0%,
+    rgba(249, 250, 251, 0.6) 60%,
+    rgba(249, 250, 251, 0.946) 95%
+    rgb(249, 250, 251) 100%
   );
 }
 
@@ -892,7 +892,7 @@ const preorderVolumeSeries = [{ name: 'Preorders', data: preorderVolumeByDay.map
   border-radius: 12px;
   background:
     linear-gradient(#ffffff, #ffffff) padding-box,
-    linear-gradient(180deg, #ffd282 0%, #ba4255 100%) border-box;
+    linear-gradient(180deg, #ffd282 0%, #db5b6b 100%) border-box;
 }
 .stat-data {
   display: flex;

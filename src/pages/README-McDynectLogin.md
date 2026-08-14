@@ -52,7 +52,7 @@ Pulled directly from Figma variables — hardcoded as arbitrary Tailwind values 
 
 | Token | Value |
 |---|---|
-| Brand background / CTA | `#911b2d` |
+| Brand background / CTA | `#b13444` |
 | Heading (Welcome!) | `#54101a` |
 | Danger asterisk | `#c70036` |
 | Body text | `#4a5565` |
