@@ -638,7 +638,7 @@ const preorderVolumeSeries = [{ name: 'Preorders', data: preorderVolumeByDay.map
     rgba(249, 250, 251, 0) 0%,
     rgba(249, 250, 251, 0) 0%,
     rgba(249, 250, 251, 0.6) 60%,
-    rgba(249, 250, 251, 0.946) 95%
+    rgba(249, 250, 251, 0.946) 95%,
     rgb(249, 250, 251) 100%
   );
 }
