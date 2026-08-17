@@ -51,7 +51,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
         @click="emit('navigate', item.key)"
       >
         <span class="nav-icon-slot">
-          <img :src="item.icon" :style="{ width: item.width + 'px', height: item.height + 'px' }" alt="" />
+          <img class="nav-icon" :src="item.icon" :style="{ width: item.width + 'px', height: item.height + 'px' }" alt="" />
         </span>
         <span class="nav-label">{{ item.label }}</span>
         <img v-if="item.chevron" class="nav-chevron" :src="iconChevronRight" alt="" />
@@ -68,6 +68,7 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
       >
         <span class="nav-icon-slot">
           <img
+            class="nav-icon"
             :src="settingsIcon.icon"
             :style="{ width: settingsIcon.width + 'px', height: settingsIcon.height + 'px' }"
             alt=""
@@ -184,10 +185,16 @@ const settingsIcon = { icon: iconSettings, width: 16.67, height: 16.67 }
 }
 .nav-item:hover {
   background: rgba(249, 223, 227, 0.5);
+  color: var(--nav-active-text);
 }
 .nav-item.active {
   background: var(--nav-active-bg);
   color: var(--nav-active-text);
+}
+.nav-item:hover .nav-icon,
+.nav-item.active .nav-icon {
+  /* Recolors the #4A5565 source icon to the primary #BD2841, calibrated to an exact match. */
+  filter: invert(16%) sepia(79%) saturate(217%) hue-rotate(300deg) brightness(93%) contrast(269%);
 }
 
 .nav-icon-slot {

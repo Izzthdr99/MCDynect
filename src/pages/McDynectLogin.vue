@@ -6,12 +6,13 @@
  * Built with Vue 3 <script setup> (Composition API). Plain HTML/CSS — no flowbite-vue
  * dependency for this page.
  *
- * NOTE ON ASSETS: the icon/logo/background image constants below point at
+ * NOTE ON ASSETS: the background pattern image constant below still points at
  * Figma's temporary asset host. Those URLs expire ~7 days after export. Before
- * shipping to production, export the same layers from Figma (Dev Mode > this
- * frame > Assets) and swap each constant for a local `import` from your own
+ * shipping to production, export that layer from Figma (Dev Mode > this
+ * frame > Assets) and swap it for a local `import` from your own
  * `assets/` folder — the geometry/classes below already match the source
- * exactly, only the `src` needs to move local.
+ * exactly, only the `src` needs to move local. (The logo was already local —
+ * reused `assets/dashboard/sidebar/full-logo.svg`, same asset as the sidebar.)
  *
  * RIGHT-PANEL ANIMATION: only the heading/subtext still animate (fade-up, transcribed
  * from Figma's motion data on node 756:15035). The orbit rings + 8 icons were
@@ -21,10 +22,7 @@
  */
 import { ref } from 'vue'
 import imgOrbitIcons from '../assets/orbit-icons.png'
-
-// --- Left panel assets ---
-const imgLogoMark = 'https://www.figma.com/api/mcp/asset/7cc852c0-3d0b-489d-a1fd-e9373bf746cf.svg'
-const imgLogoWordmark = 'https://www.figma.com/api/mcp/asset/5f05cc29-d15a-448e-9f3d-28a8c21fc45d.svg'
+import imgLogo from '../assets/dashboard/sidebar/full-logo.svg'
 
 // --- Right panel assets ---
 const imgPatternBackground = 'https://www.figma.com/api/mcp/asset/282ac419-1705-41de-b15b-af1755e4cac4.png'
@@ -55,8 +53,7 @@ async function handleSubmit() {
   <div class="page">
     <div class="left">
       <div class="logo-row">
-        <img class="logo-mark" :src="imgLogoMark" alt="MC" />
-        <img class="logo-text" :src="imgLogoWordmark" alt="dynect" />
+        <img class="logo-full" :src="imgLogo" alt="MC Dynect" />
       </div>
 
       <div class="form-wrap">
@@ -155,20 +152,13 @@ async function handleSubmit() {
 .logo-row {
   display: flex;
   align-items: center;
-  gap: 2px;
   height: 24px;
   width: 100%;
 }
-.logo-row img {
+.logo-full {
   display: block;
-  height: 100%;
+  height: 20px;
   width: auto;
-}
-.logo-mark {
-  height: 21px;
-}
-.logo-text {
-  height: 22px;
 }
 
 .form-wrap {

@@ -379,11 +379,11 @@ const salesByChannelSeries = salesByChannel.map((channel) => channel.value)
   inset: 0;
   background-image: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0) 28.397%,
-    rgba(255, 255, 255, 0.6) 35.859%,
-    rgba(255, 255, 255, 0.946) 45.87%,
-    rgb(255, 255, 255) 100%
+    rgba(249, 250, 251, 0) 0%,
+    rgba(249, 250, 251, 0) 0%,
+    rgba(249, 250, 251, 0.6) 60%,
+    rgba(249, 250, 251, 0.946) 95%,
+    rgb(249, 250, 251) 100%
   );
 }
 
